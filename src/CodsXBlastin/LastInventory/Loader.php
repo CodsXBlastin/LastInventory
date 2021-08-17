@@ -44,13 +44,14 @@ class Loader extends PluginBase
                         $sender->sendMessage($this->getUsage());
                         return;
                     }
-                    if (!$player == null) {
+                    if ($player == null) {
                         $sender->sendMessage($this->getUsage());
                         return;
-                    }
+                    } else {
                     Loader::revive($player);
                     $sender->sendMessage("§r§aRestored {$player->getName()}'s Last Inventory");
                     $player->sendMessage("§r§aYour Last Inventory was Restored.");
+                    }
                 }
             }
         });
