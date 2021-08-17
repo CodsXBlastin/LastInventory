@@ -44,7 +44,7 @@ class Loader extends PluginBase
                         $sender->sendMessage($this->getUsage());
                         return;
                     }
-                    if (!$player === null) {
+                    if (!$player == null) {
                         $sender->sendMessage($this->getUsage());
                         return;
                     }
