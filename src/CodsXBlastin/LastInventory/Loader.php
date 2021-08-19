@@ -76,7 +76,7 @@ class Loader extends PluginBase
         }, $this);
     }
 
-    public static function revive(Player $player): bool
+    static public function revive(Player $player): bool
     {
         if (self::$data->exists($player->getName())) {
             $data = self::$data->get($player->getName());
