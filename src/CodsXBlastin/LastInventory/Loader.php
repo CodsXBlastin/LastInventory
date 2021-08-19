@@ -38,7 +38,6 @@ class Loader extends PluginBase
 
             public function execute(CommandSender $sender, string $commandLabel, array $args)
             {
-                $player = Server::getInstance()->getPlayer($args[0]);
                 if ($sender->hasPermission("lastinventory.command") || $sender->isOp()) {
                     if (!isset($args[0])) {
                         $sender->sendMessage($this->getUsage());
@@ -48,6 +47,7 @@ class Loader extends PluginBase
                         $sender->sendMessage($this->getUsage());
                         return;
                     } else {
+	            $player = Server::getInstance()->getPlayer($args[0]);
                     Loader::revive($player);
                     $sender->sendMessage("§r§aRestored {$player->getName()}'s Last Inventory");
                     $player->sendMessage("§r§aYour Last Inventory was Restored.");
