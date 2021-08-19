@@ -43,11 +43,11 @@ class Loader extends PluginBase
                         $sender->sendMessage($this->getUsage());
                         return;
                     }
+		    $player = Server::getInstance()->getPlayer($args[0]);
                     if ($player == null) {
                         $sender->sendMessage($this->getUsage());
                         return;
                     } else {
-	            $player = Server::getInstance()->getPlayer($args[0]);
                     Loader::revive($player);
                     $sender->sendMessage("§r§aRestored {$player->getName()}'s Last Inventory");
                     $player->sendMessage("§r§aYour Last Inventory was Restored.");
