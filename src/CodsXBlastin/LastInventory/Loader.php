@@ -82,7 +82,7 @@ final class Loader extends PluginBase implements Listener
     /**
      * @throws JsonException
      */
-    public function onDeath(PlayerDeathEvent $event)
+    final public function onDeath(PlayerDeathEvent $event)
     {
         $player = $event->getPlayer();
         $armors = $items = [];
