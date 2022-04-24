@@ -1,5 +1,5 @@
 <h1>Last Inventory&nbsp;<img src="https://poggit.pmmp.io/ci.shield/CodsXBlastin/LastInventory/~" alt="poggit"/></h1>
-JSON based Last Inventory System
+A JSON based Last Inventory System
 
 ## How To Install
 1. Download the *latest* .phar file.
