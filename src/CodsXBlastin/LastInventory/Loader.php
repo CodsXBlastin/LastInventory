@@ -8,7 +8,6 @@ use Exception;
 use JsonException;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\item\Item;
 use pocketmine\player\Player;
@@ -16,7 +15,6 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
 use pocketmine\utils\TextFormat;
-use pocketmine\world\sound\PopSound;
 
 final class Loader extends PluginBase implements Listener
 {
@@ -27,11 +25,6 @@ final class Loader extends PluginBase implements Listener
 
     public static Config $data;
 
-    final protected function onLoad(): void
-    {
-        self::setInstance($this);
-    }
-    
     final public function onEnable(): void
     {
         @mkdir($this->getDataFolder());
@@ -44,15 +37,9 @@ final class Loader extends PluginBase implements Listener
         $pm = $this->getServer()->getPluginManager();
         $pm->registerEvents($this, $this);
     }
-    
-    final public static function getInstance(): Loader
-    {
-        return self::getSingletonInstance();
-    }
 
     final public static function revive(Player $player, Player|CommandSender $reviver): bool
     {
-        //in the future maybe remove the data if the player gets their inventory restored, but we'll cross that bridge when we get there
         if (self::$data->exists($player->getName())) {
             $data = self::$data->get($player->getName());
             $armor = $player->getArmorInventory();
@@ -63,8 +50,8 @@ final class Loader extends PluginBase implements Listener
             foreach ($data["items"] as $slot => $serializedItem) {
                 $inventory->setItem($slot, Item::jsonDeserialize($serializedItem));
             }
+            $player->getXpManager()->setCurrentTotalXp($data["experience"]);
             $player->sendMessage(TextFormat::RESET . TextFormat::GREEN . "Your Inventory has Been Restored.");
-            $player->broadcastSound(new PopSound(), [$player]);
             $reviver->sendMessage(TextFormat::RESET . TextFormat::GREEN . "Successfully Restored {$player->getName()}'s Inventory.");
             return true;
         }
@@ -83,8 +70,8 @@ final class Loader extends PluginBase implements Listener
     final public function get(Player $player): array
     {
         if (!self::$data->exists($player->getName())) {
-            $this->getLogger()->alert("Unable to Find Player Data relating to Player {$player->getName()}.");
-            return [];
+            $this->getLogger()->alert("Unable to Find Player Data relating to {$player->getName()}.");
+            return self::$data->get($player->getName()) ?? [];
         }
         return self::$data->get($player->getName());
     }
@@ -102,9 +89,11 @@ final class Loader extends PluginBase implements Listener
         foreach ($player->getInventory()->getContents() as $slot => $item) {
             $items[$slot] = $item->jsonSerialize();
         }
+        $exp = $player->getXpManager()->getCurrentTotalXp();
         self::$data->set($player->getName(), [
             "armor" => $armors,
             "items" => $items,
+            "experience" => $exp
         ]);
         self::$data->save();
     }
