@@ -38,6 +38,9 @@ final class Loader extends PluginBase implements Listener
         $pm->registerEvents($this, $this);
     }
 
+    /**
+     * @throws JsonException
+     */
     final public static function revive(Player $player, Player|CommandSender $reviver): bool
     {
         if (self::$data->exists($player->getName())) {
@@ -53,6 +56,8 @@ final class Loader extends PluginBase implements Listener
             $player->getXpManager()->setCurrentTotalXp($data["experience"]);
             $player->sendMessage(TextFormat::RESET . TextFormat::GREEN . "Your Inventory has Been Restored.");
             $reviver->sendMessage(TextFormat::RESET . TextFormat::GREEN . "Successfully Restored {$player->getName()}'s Inventory.");
+            self::$data->remove($player->getName());
+            self::$data->save();
             return true;
         }
         self::sendErrorMessage($reviver, "Unable to Restore {$player->getName()}'s Inventory.");
