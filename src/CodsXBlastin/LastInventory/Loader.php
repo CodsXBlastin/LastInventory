@@ -27,6 +27,11 @@ final class Loader extends PluginBase implements Listener
 
     public static Config $data;
 
+    final protected function onLoad(): void
+    {
+        self::setInstance($this);
+    }
+    
     final public function onEnable(): void
     {
         @mkdir($this->getDataFolder());
@@ -38,6 +43,11 @@ final class Loader extends PluginBase implements Listener
 
         $pm = $this->getServer()->getPluginManager();
         $pm->registerEvents($this, $this);
+    }
+    
+    final public static function getInstance(): SaicoCrate
+    {
+        return self::getSingletonInstance();
     }
 
     final public static function revive(Player $player, Player|CommandSender $reviver): bool
