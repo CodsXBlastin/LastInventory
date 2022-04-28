@@ -45,7 +45,7 @@ final class Loader extends PluginBase implements Listener
         $pm->registerEvents($this, $this);
     }
     
-    final public static function getInstance(): SaicoCrate
+    final public static function getInstance(): Loader
     {
         return self::getSingletonInstance();
     }
