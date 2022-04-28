@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CodsXBlastin\LastInventory;
 
+use JsonException;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\console\ConsoleCommandSender;
@@ -18,6 +19,9 @@ final class LastInventoryCommand extends Command
         $this->setPermission("lastinventory.command");
     }
 
+    /**
+     * @throws JsonException
+     */
     final public function execute(CommandSender $sender, string $commandLabel, array $args)
     {
         if ($sender instanceof ConsoleCommandSender || $sender->hasPermission($this->getPermission())) {
